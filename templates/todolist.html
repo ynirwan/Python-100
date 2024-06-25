@@ -1,0 +1,167 @@
+<html>
+<head>
+</head>
+<style>
+
+.hidden {
+  display: none;
+}
+.hidden1 {
+  display: none;
+  }
+.hidden2 {
+  display: none;
+  }
+.button {
+  background-color: black;
+  color: white;
+  border: none;
+  cursor: pointer;
+  opacity: 0.8;
+  position: fixed;
+  bottom: 820;
+  right: 1000;
+  
+  
+}
+.button1 {
+  background-color: black;
+  color: white;
+  border: none;
+  cursor: pointer;
+  opacity: 0.8;
+  position: fixed;
+  top: 130px;
+  left: 790px;
+  
+  }
+.form {
+  max-width: 300px;
+  padding: 10px;
+  background-color: white;
+}
+
+
+
+.form-container {
+  max-width: 300px;
+  padding: 100px;
+  background-color: lightgreen;
+  position: fixed;
+  top: 85px;
+  left: 480px;
+
+  opacity: 0.6;
+
+}
+.form-container1 {
+  max-width: 30px;
+  padding: 10px;
+ 
+  position: center;
+  opacity: 0.6;
+ 
+}
+
+</style>
+
+
+<body style="background-color:#0a63f2;">
+
+
+<h3 style= "text-align:left"> ADD  LIST  <h3>
+<div  style="background-color:blue;">
+
+
+<a href="/listdate.py">
+<button type="button" style="align:left;width: 90px;
+  padding: 1px;
+  border: 1px solid white;
+  margin: 0;background-color:white;" onclick="List.py" > LIST DATE </button>
+</a>
+
+
+ <button type="button" style="align:center;width: 100px;
+  padding: 1px;
+  border: 1px solid white;
+  margin: 0;background-color:white;position: absolute; right: 1000px;" onclick="openForm2()" >  CREATE LIST  </button>
+
+<a href="/listname.py">
+ <button style="align:center;width: 90px;
+  padding: 1px;
+  border: 1px solid white;
+  margin: 0;background-color:white;position: absolute; right: 10px;" >  LIST NAME  </button>
+</a>
+</div>
+
+
+
+<div class="hidden2"  id="hidden2">
+<form >
+<button class= "button" type="button"  onclick= "openForm()">BY DATE</button>
+<button class= "button1" type="button"  onclick= "openForm1()">BY NAME</button>
+</form>
+</div>
+
+
+<div class="hidden"  id="hidden">
+<form class="form-container">
+<label for="name"><b>{{ today }}</b></label>
+<br>
+<label for="ITEM"><b>ITEMS</b></label>
+<input type="text" placeholder="Enter ITEM" name="      ITEM 1" required>
+<input type="text" placeholder="Enter ITEM" name="      ITEM 2" required>
+<input type="text" placeholder="Enter ITEM" name="      ITEM 3" required>
+<input type="text" placeholder="Enter ITEM" name="      ITEM 4" required>
+<input type="text" placeholder="Enter ITEM" name="      ITEM 5" required>
+<button type="submit" >Submit</button>
+<button type="submit" >&#10062;</button>
+
+
+</form>
+</div>
+
+<div class="hidden1"  id="hidden1">
+<form  class="form-container">
+<label for="name"><b>NAME</b></label>
+<input type="text" placeholder="NAME" name="Name" required>
+
+<label for="ITEM"><b>ITEMS</b></label>
+<input type="text" placeholder="Enter ITEM" name="      ITEM 1" required>
+<input type="text" placeholder="Enter ITEM" name="      ITEM 2" required>
+<input type="text" placeholder="Enter ITEM" name="      ITEM 3" required>
+<input type="text" placeholder="Enter ITEM" name="      ITEM 4" required>
+<input type="text" placeholder="Enter ITEM" name="      ITEM 5" required>
+<button  type="submit" >Submit</button>
+<button type="submit" >&#10062;</button>
+
+
+</form>
+</div>
+
+
+<script>
+
+function openForm2() {
+  document.getElementById("hidden2").style.display = "block";
+}
+
+function openForm() {
+  document.getElementById("hidden").style.display = "block";
+}
+function openForm1() {
+  document.getElementById("hidden1").style.display = "block";
+}
+
+</script>
+
+
+
+
+
+
+
+
+</body>
+
+</html>
