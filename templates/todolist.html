@@ -3,15 +3,11 @@
 </head>
 <style>
 
-.hidden {
-  display: none;
-}
+
 .hidden1 {
   display: none;
   }
-.hidden2 {
-  display: none;
-  }
+
 .button {
   background-color: black;
   color: white;
@@ -51,7 +47,7 @@
   top: 85px;
   left: 480px;
 
-  opacity: 0.6;
+  opacity: 0.9;
 
 }
 .form-container1 {
@@ -69,86 +65,84 @@
 <body style="background-color:#0a63f2;">
 
 
-<h3 style= "text-align:left"> ADD  LIST  <h3>
-<div  style="background-color:blue;">
-
-
-<a href="/listdate.py">
-<button type="button" style="align:left;width: 90px;
+<button type="button" style="align:left;width: 100px;
   padding: 1px;
-  border: 1px solid white;
-  margin: 0;background-color:white;" onclick="List.py" > LIST DATE </button>
-</a>
+  border: 1px solid black;
+  margin: 0;background-color:white;position: absolute; right: 1450px;"> LISTS  </button>
 
 
- <button type="button" style="align:center;width: 100px;
+ <button type="button" style="align:left;width: 100px;
   padding: 1px;
-  border: 1px solid white;
-  margin: 0;background-color:white;position: absolute; right: 1000px;" onclick="openForm2()" >  CREATE LIST  </button>
+  border: 1px solid black;
+  margin: 0;background-color:white;position: absolute; right: 1350px;" onclick="openForm1()" >  NEW LIST  </button>
 
-<a href="/listname.py">
- <button style="align:center;width: 90px;
+
+<form action="/showlist.py" method="POST" >
+
+<input type="text" style="align:left;width: 150px;
   padding: 1px;
-  border: 1px solid white;
-  margin: 0;background-color:white;position: absolute; right: 10px;" >  LIST NAME  </button>
-</a>
-</div>
-
-
-
-<div class="hidden2"  id="hidden2">
-<form >
-<button class= "button" type="button"  onclick= "openForm()">BY DATE</button>
-<button class= "button1" type="button"  onclick= "openForm1()">BY NAME</button>
-</form>
-</div>
-
-
-<div class="hidden"  id="hidden">
-<form class="form-container">
-<label for="name"><b>{{ today }}</b></label>
-<br>
-<label for="ITEM"><b>ITEMS</b></label>
-<input type="text" placeholder="Enter ITEM" name="      ITEM 1" required>
-<input type="text" placeholder="Enter ITEM" name="      ITEM 2" required>
-<input type="text" placeholder="Enter ITEM" name="      ITEM 3" required>
-<input type="text" placeholder="Enter ITEM" name="      ITEM 4" required>
-<input type="text" placeholder="Enter ITEM" name="      ITEM 5" required>
-<button type="submit" >Submit</button>
-<button type="submit" >&#10062;</button>
-
+  border: 1px solid black;
+  margin: 0;background-color:white;position: absolute; right: 1200px;" placeholder="SEARCH LIST ITEM" name="name"> >
 
 </form>
-</div>
+
+
+
+
 
 <div class="hidden1"  id="hidden1">
-<form  class="form-container">
+<form action="/create.py" method="POST"  class="form-container">
 <label for="name"><b>NAME</b></label>
 <input type="text" placeholder="NAME" name="Name" required>
-
-<label for="ITEM"><b>ITEMS</b></label>
-<input type="text" placeholder="Enter ITEM" name="      ITEM 1" required>
-<input type="text" placeholder="Enter ITEM" name="      ITEM 2" required>
-<input type="text" placeholder="Enter ITEM" name="      ITEM 3" required>
-<input type="text" placeholder="Enter ITEM" name="      ITEM 4" required>
-<input type="text" placeholder="Enter ITEM" name="      ITEM 5" required>
+<br>
+<label for="ITEM"><b>ITEMS</b></label><br>
+<input type="text" placeholder="Enter ITEM" name="ITEM1" required>
+<input type="text" placeholder="Enter ITEM" name="ITEM2" required>
+<input type="text" placeholder="Enter ITEM" name="ITEM3" required>
+<input type="text" placeholder="Enter ITEM" name="ITEM4" required>
+<input type="text" placeholder="Enter ITEM" name="ITEM5" >
+<br>
 <button  type="submit" >Submit</button>
+<br>
 <button type="submit" >&#10062;</button>
 
 
 </form>
 </div>
+
+
+  {{ listexits }} 
+
+
+
+ <div  style="align:left;width: 100px;
+  padding: 1px;
+  border: 1px solid white;
+  margin: 0;right: 1450px;   top: 50px;
+">  
+
+
+{%for i in range(0, len)%} 
+
+
+<li> <button style="width: 70px"; type="checkbox"  value="{{ todolist[i] }}">  {{ todolist[i] }}  </button> </li>
+
+
+{%endfor%} 
+
+</form>
+</div>
+
+
+
+
+
+
 
 
 <script>
 
-function openForm2() {
-  document.getElementById("hidden2").style.display = "block";
-}
 
-function openForm() {
-  document.getElementById("hidden").style.display = "block";
-}
 function openForm1() {
   document.getElementById("hidden1").style.display = "block";
 }

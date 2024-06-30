@@ -9,10 +9,7 @@ WORKDIR /todolist
 
 
 RUN pip install --upgrade pip
-RUN pip install Flask==0.10.1   validators ConfigParser pymongo redis   # mysql-connector  pymysql mysql-connector-python
-
-RUN pip install -r requirements.txt
-
+RUN pip install Flask==0.10.1   validators ConfigParser pymongo redis  
 
 
 

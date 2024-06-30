@@ -1,11 +1,11 @@
-from flask import Flask, request, redirect, Response, render_template, flash 
+from flask import Flask, request, redirect, Response, render_template, flash, session 
 import cgi, cgitb, validators, sys, redis,  pymongo
 from datetime import date 
+import os, re, socket 
+from werkzeug.utils import secure_filename
 
 
-
-
-myclient = pymongo.MongoClient("mongodb://172.18.0.4:27017/")
+myclient = pymongo.MongoClient("mongodb://mongo:27017/")
 mydb = myclient["customers"]
 mydb1 = myclient["eMAIL"]
 emailcoll = mydb1["Emailcollection"]
@@ -13,11 +13,12 @@ emailcoll = mydb1["Emailcollection"]
 
 
 
-
-SIGNUP = redis.Redis(host='redis', port=6379, db=0)
+SIGNUP = redis.Redis(host='redis', port=6379, db=0, decode_responses=True)
 
 
 app = Flask (__name__)
+app.secret_key = "f9bf78b9a18ce6d46a0cd2b0b86df9dai"
+
 
 app.config["DEBUG"] = True
 @app.route('/', methods=['GET', 'POST'])
@@ -25,53 +26,55 @@ app.config["DEBUG"] = True
 def home():
        return render_template("index.html")
 
-
-
-@app.route('/signup.html', methods=['GET', 'POST'])
+@app.route('/signup.py', methods=['GET', 'POST'])
 def signup():
        
-       return render_template("signup.html")
- 
- 
+           return render_template("/signup.py")
+
+
+
+
+
 @app.route('/login.py', methods=['GET', 'POST'])
 def login():
-
+          usernameexits= "ussername exits"
+          emailidexits=  "Email id exits"
+          passwordmismatch="Password MismatCh"
           username = request.form.get('username')
           email = request.form.get('email')
-          psw = request.form['psw']
-          repsw = request.form['psw-repeat']
+          psw = request.form.get('psw')
+          repsw = request.form.get('psw-repeat')
    
 
           if psw != repsw :
-          # flash('You were successfully logged in')
-           return redirect("/signup.html")  
+           return render_template("/signup.py", passwordmismatch=passwordmismatch)  
 
           e = None 
 
         
           r  =   SIGNUP.hget(username, 'EMAIL')
-          mydict1 = ({"EMAIl": email})
+          mydict1 = ({"EMAIL": email})
         
           mydoc = emailcoll.find_one(mydict1)
          
 
           if r != e:
-            return redirect("/signup.html")
+            return render_template("/signup.py", usernameexits=usernameexits)
           elif mydoc != e:
-            return redirect("/signup.html")
+            return render_template("/signup.py", emailidexits=emailidexits)
           else:
-           SIGNUP.hmset(username, { 'EMAIL' : email, 'PASSWORD' : psw })
-           myclient = pymongo.MongoClient("mongodb://172.18.0.4:27017/")
-           mydb = myclient["customers"]
-           mycol = mydb[ ( username ) ] 
-           mydict = { "NAME":  "username" , "EMAIL": "EMAIL" }
-           mydict["NAME"] = username
-           mydict["EMAIL"] = email
-       
-           x = emailcoll.insert_one(mydict1)
-           x = mycol.insert_one(mydict)
+                SIGNUP.lpush(username+"todolist", "list1")
+                SIGNUP.hmset(username, {'EMAIL': email, 'PASSWORD': psw})
+                myclient = pymongo.MongoClient("mongodb://mongo:27017/")
+                mydb = myclient["customers"]
+                mycol = mydb[ ( username ) ] 
+                mydict = { "NAME":  "username" , "EMAIL": "EMAIL" }
+                mydict["NAME"] = username
+                mydict["EMAIL"] = email
+                x = emailcoll.insert_one(mydict1)
+                x = mycol.insert_one(mydict)
+                return render_template("login.py", username=username)
 
-           return render_template("login.py", username=username)
  
          
 
@@ -80,70 +83,84 @@ def login():
 
 @app.route('/dash.py', methods=['GET', 'POST'])
 def dash():
-
+        
+          loginsuccess= "You were successfully logged in"
+          loginfail= "CheCk your Credentials"
 
           username = request.form.get('username')
           password = request.form.get('password')
           Access  =   SIGNUP.hget(username, 'PASSWORD')
-          A  = str(Access)
-          p = password
-          p1 = "'{}'".format(p)
-          r1 =   str("b")+ p1
-          Access1 = str(r1)
+          session['username']= username;
 
-
-          if Access1 == A : 
-           return render_template("dash.py", username=username)
+          if Access == password : 
+           return render_template("dash.py", username=username,loginsuccess=loginsuccess)
           else:
-           return render_template("signup.html")
-            
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+          
+           return render_template("/index.html", loginfail=loginfail)
 
 
 @app.route('/todolist.html', methods=['GET', 'POST'])
 def todolist():
-          today = date.today()
-         
-          return render_template("todolist.html", today=today) 
+          username =  session['username'];
+
+          todolist = SIGNUP.lrange(username+"todolist",  0, -1)
+
+          return render_template("todolist.html",  len = len(todolist), todolist = todolist)
+
 
 @app.route('/create.py', methods =['POST', 'GET'])
 def  create():
-          today = date.today() 
-          return render_template("/create.py", today=today) 
 
-@app.route('/listdate.py', methods=['GET', 'POST'])
-def listdate():
-          return render_template("todolist.html")
+          username =  session['username'];
+          todolist = SIGNUP.lrange(username+"todolist",  0, -1)
+          listexits=  "listexits"
+          name = str(request.form.get('Name'))
+          item1 = str(request.form.get('ITEM1'))
+          item2 = str(request.form.get('ITEM2'))
+          item3 = str(request.form.get('ITEM3'))
+          item4 = str(request.form.get('ITEM4'))
+          item5 = str(request.form.get('ITEM5'))
+          u = username+"todolist"
+          p1 = "'{}'".format(u)
+          p4 = str(u)
 
-@app.route('/listname.py', methods=['GET', 'POST'])
-def listname():
-          return render_template("todolist.html")
+          r  =   SIGNUP.lrange(p4, 0, -1)
+
+          if name in r:
+                    
+           return render_template("/todolist.html",  listexits=listexits,  len = len(todolist), todolist=todolist) 
+                   
+          else: 
+
+
+           SIGNUP.lpush(p4,  name)
+           SIGNUP.lpush(username+name, item1, item2, item3, item4, item5)
+
+           return redirect("todolist.html")
+
+          
+ 
+      #    return render_template("print.html",  r = item4, name=name )
+
+
+
+@app.route('/showlist.py', methods =['POST', 'GET'])
+def  show():
+
+          username =  session['username'];
+          name = str(request.form.get('name'))
+          u = username+name
+          p1 = "'{}'".format(u)
+          p4 = str(u)
+          todolist = SIGNUP.lrange(p4,   0, -1)
+
+
+          return render_template("showlist.py",   len = len(todolist),todolist = todolist)
+
+        
+
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=True, host='0.0.0.0') 
 
- 
+

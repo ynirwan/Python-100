@@ -1,5 +1,25 @@
-<html><head><style>body{background-color: Yellow; text-align: center;</style></head><body>
-      <form  action="/login.py" method="post">
+<html><head><style>body{
+  max-width: 10px;
+  padding: 10px;
+  background-color: blue;
+  position: fixed;
+  top: 15px;
+  left: 40px;
+
+.form-container
+
+{
+  max-width: 900px;
+  height: 600px;
+  padding: 10px;
+  background-color: Yellow;
+  position: fixed;
+  top: 50px;
+  left: 500px;
+
+  } 
+        </style></head><body>
+      <form  action="/login.py" method="post" class="form-container" >
                 <label for="username"><b>USERNAME</b></label>
                 <input type="text" placeholder="Enter username" name="username" required>
                 <br>
@@ -16,7 +36,19 @@
                 <div>
                 <button  type="submit" value="submit">Sign Up</button>
                 </div>
+
+
+
+        	    {{ passwordmismatch }} 
+                    {{  usernameexits  }}
+                    {{ emailidexits  }}
+                     
+
                 </form>
+
+
+
+
        </body>
 </html>
 

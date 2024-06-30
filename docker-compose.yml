@@ -7,14 +7,25 @@ services:
   expose:
    - "6379"
   volumes:
-   - .:/todolist
+   - todolist:/todolist
+
+ mongo:
+  image: mongo
+  expose:
+   - "27017"
+  volumes:
+   - todolist:/todolist
+
  web:
   image: ynirwan/todolist
   command: python app.py
   ports:
-   - "5000:80"
+   - "80:5000"
   volumes:
-   - .:/todolist
+   - todolist:/todolist
   links:
    - redis
+
+volumes:
+  todolist:
 
